@@ -1,0 +1,26 @@
+flowchart TB
+    Internet((Internet)) --> ALB[Public Application Load Balancer]
+    subgraph VPC["VPC 10.20.0.0/16"]
+      subgraph Public["Public subnets - 2 AZs"]
+        ALB
+        IGW[Internet Gateway]
+        NAT[NAT Gateway - optional / chargeable]
+      end
+      subgraph PrivateApp["Private application subnets - 2 AZs"]
+        ASG[Auto Scaling Group]
+        EC2[EC2 instances / Nginx]
+      end
+      subgraph PrivateDB["Private database subnets - 2 AZs"]
+        RDS[(RDS MySQL - encrypted)]
+      end
+      SM[Secrets Manager]
+      S3[S3 application storage]
+      Logs[S3 ALB access logs]
+    end
+    ALB --> ASG --> EC2
+    EC2 --> RDS
+    EC2 -. outbound updates via optional .-> NAT
+    NAT --> IGW
+    ALB --> Logs
+    SM -. database credentials .-> RDS
+    EC2 --> S3

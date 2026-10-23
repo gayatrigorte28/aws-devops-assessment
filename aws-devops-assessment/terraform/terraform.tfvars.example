@@ -1,0 +1,11 @@
+# Copy to terraform.tfvars only for a deliberate, authorized deployment.
+# Keep expensive resources disabled during local validation.
+aws_region         = "ap-south-1"
+project_name       = "devops-assessment"
+enable_nat_gateway = false
+enable_compute     = false
+enable_alb         = false
+enable_database    = false
+enable_https       = false
+acm_certificate_arn = ""
+allowed_http_cidr  = "0.0.0.0/0"
